@@ -6,7 +6,8 @@ import java.sql.*;
 import javax.swing.*;
 
 public class Login {
-    
+    private String username,password;
+
     public Login(){
         JPanel panel = new JPanel();
         JFrame frame = new JFrame("Login");
@@ -54,7 +55,11 @@ public class Login {
             loginButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                tryLogin();
+                username = userText.getText();
+                // Insecure use of password.. Change later
+                password = String.valueOf(passwordField.getPassword());
+                System.out.println(password);
+                tryLogin(username,password);
                 
                 }
             });
@@ -84,17 +89,35 @@ public class Login {
         frame.setVisible(true);
 
     }
-    public void tryLogin(){
+    public void tryLogin(String username, String password){
         try{  
             Class.forName("com.mysql.cj.jdbc.Driver");  
             Connection con=DriverManager.getConnection(  
             "jdbc:mysql://localhost:3306/bankdb","user","password");  
-            //here sonoo is database name, root is username and password  
+            //bankdb is the database name, user is username and password is...
+            //in my docker image. Change to whatever you have  
             Statement stmt=con.createStatement();  
-            ResultSet rs=stmt.executeQuery("select userName from user where id = 1");  
-            while(rs.next())  
-            System.out.println(rs.getString(1));  
-            con.close();  
+            ResultSet rs=stmt.executeQuery("SELECT id FROM user WHERE userName LIKE '" +
+                                             username +"'");  
+            
+            if(rs.next()){  
+                System.out.println(rs.getString(1));
+                ResultSet rs2=stmt.executeQuery(
+                    "SELECT id FROM user WHERE userName LIKE '" +
+                    username +"'" +
+                    " AND password LIKE '" +
+                    password.toString() + "'");
+                        if(rs2.next()){
+                            JOptionPane.showMessageDialog(null, "Login successful");
+                            con.close();
+                        }
+                        else if(rs2.next() == false){
+                            JOptionPane.showMessageDialog(null, "Incorrect password");
+                        }
+                }
+            else if(rs.next() == false){
+                JOptionPane.showMessageDialog(null, "User does not exist");
+            }
             }catch(Exception e){
                  System.out.println(e);
                 }  
