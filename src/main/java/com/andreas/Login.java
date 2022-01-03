@@ -101,7 +101,6 @@ public class Login {
                                              username +"'");  
             
             if(rs.next()){  
-                System.out.println(rs.getString(1));
                 ResultSet rs2=stmt.executeQuery(
                     "SELECT id FROM user WHERE userName LIKE '" +
                     username +"'" +
