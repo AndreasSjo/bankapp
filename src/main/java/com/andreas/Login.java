@@ -86,9 +86,9 @@ public class Login {
     }
     public void tryLogin(){
         try{  
-            Class.forName("com.mysql.jdbc.Driver");  
+            Class.forName("com.mysql.cj.jdbc.Driver");  
             Connection con=DriverManager.getConnection(  
-            "jdbc:mysql://localhost:3306/bankdb","root","root");  
+            "jdbc:mysql://localhost:3306/bankdb","user","password");  
             //here sonoo is database name, root is username and password  
             Statement stmt=con.createStatement();  
             ResultSet rs=stmt.executeQuery("select userName from user where id = 1");  
