@@ -10,6 +10,8 @@ import java.awt.event.ActionListener;
 import java.sql.*;
 
 public class Index {
+    // Establish a connection to database
+    DBconnection dbc = new DBconnection();
     JPanel panel = new JPanel();
     JFrame frame = new JFrame("Start");
     GridBagConstraints gbc = new GridBagConstraints();
@@ -17,7 +19,9 @@ public class Index {
     Insets inset = new Insets(10, 10, 10, 10);
 
     public Index(String user) {
-        PersonData pD = new PersonData(user);
+        // Create an object of PersonData to retrieve info
+        // passing a databaseconnection and the username
+        PersonData pD = new PersonData(dbc,user);
         frame.setSize(350, 350);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(panel);
@@ -31,7 +35,9 @@ public class Index {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                // TODO Auto-generated method stub
+                // Creates a new object of withdrawal (basically a window)
+                // passing on the accId which is same as user_id
+                Withdrawal w = new Withdrawal(pD.accId);
             }
         });
 
@@ -85,22 +91,23 @@ public class Index {
     }
 }
 
+
 class PersonData {
     String fName, lName;
     int accId;
 
-    public PersonData(String username) {
+    public PersonData(DBconnection dbc, String username) {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bankdb", "user", "password");
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM user WHERE userName LIKE '" + username + "'");
 
+            ResultSet rs = dbc.stmt.executeQuery(
+                "SELECT * FROM user WHERE userName LIKE '" + username + "'"
+                );
+            // In the table 'user' 1st row is 'id',
+            // 2nd is 'firstName', 3rd is 'lastName'
             while (rs.next()) {
                 this.accId = rs.getInt(1);
                 this.fName = rs.getString(2);
                 this.lName = rs.getString(3);
-                con.close();
             }
 
         } catch (Exception e) {
@@ -108,3 +115,16 @@ class PersonData {
         }
     }
 }
+
+class WithdrawalWindow{
+    JPanel panel = new JPanel();
+    JFrame frame = new JFrame("Start");
+    GridBagConstraints gbc = new GridBagConstraints();
+    GridBagLayout gbl = new GridBagLayout();
+    Insets inset = new Insets(10, 10, 10, 10);
+
+    WithdrawalWindow(){
+        JLabel amountLabel = new JLabel("Amount to withdraw");
+    }
+}
+
