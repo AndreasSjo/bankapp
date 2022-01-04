@@ -82,7 +82,7 @@ public class Withdrawal {
         try {
             tempInteger = Integer.parseInt(input);
         // Then check the number of digits as the table only can handle 38 digits
-            if(String.valueOf(tempInteger).length() <= 38){
+            if(String.valueOf(tempInteger).length() < 39){
                 this.withdrawalAmount = tempInteger;
                 System.out.println("acceptable input");
             }
