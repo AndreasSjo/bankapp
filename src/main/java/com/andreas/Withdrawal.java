@@ -2,6 +2,7 @@ package com.andreas;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Date;
 import java.sql.ResultSet;
 
 import javax.swing.*;
@@ -18,6 +19,7 @@ public class Withdrawal {
     int withdrawalAmount;
 
     public Withdrawal(int accId) {
+
         this.accountId = accId;
         getAccountBalance();
         System.out.println(accountBalance);
@@ -33,7 +35,7 @@ public class Withdrawal {
 
         JTextField amountTextField = new JTextField("", 10);
 
-        
+
         JButton confirmButton = new JButton("Confirm");
             confirmButton.addActionListener(new ActionListener() {
                 @Override
@@ -67,7 +69,7 @@ public class Withdrawal {
             ResultSet rs = dbc.stmt.executeQuery(
                 "SELECT balance FROM account WHERE user_id LIKE '" + this.accountId + "'"
                 );
-            // returns the first row from balance field
+            // returns the first column from balance field
             while (rs.next()) {
                 this.accountBalance = rs.getInt(1);
             }
@@ -84,10 +86,11 @@ public class Withdrawal {
         // Then check the number of digits as the table only can handle 38 digits
             if(String.valueOf(tempInteger).length() < 39){
                 this.withdrawalAmount = tempInteger;
-                System.out.println("acceptable input");
+                executeTransaction();
+                frame.dispose();
             }
             else{
-                JOptionPane.showMessageDialog(null, "Whoa! thats to much");
+                JOptionPane.showMessageDialog(null, "Whoa! that´s to much");
             }
         } catch (NumberFormatException ne) {
             JOptionPane.showMessageDialog(null, "input only digits please");
@@ -96,20 +99,24 @@ public class Withdrawal {
     }
 
      private void executeTransaction(){
+        // take off the withdraw amount from account
+        this.accountBalance -= withdrawalAmount;
+
+        // create an valid sql date format
+         long millis=System.currentTimeMillis();
+         java.sql.Date date=new java.sql.Date(millis);
+         System.out.println(date);
+
         try {
 
-            ResultSet rs = dbc.stmt.executeQuery(
-                "SELECT * FROM user "
-                );
-            // In the table 'user' 1st row is 'id',
-            // 2nd is 'firstName', 3rd is 'lastName'
-            while (rs.next()) {
-
-            }
+            String sql = "UPDATE account " +
+                        "SET balance = "+ accountBalance +
+                        " WHERE user_id = " + accountId;
+            dbc.stmt.executeUpdate(sql);
 
         } catch (Exception e) {
             System.out.println(e);
         }
-    
-    } 
+
+    }
 }

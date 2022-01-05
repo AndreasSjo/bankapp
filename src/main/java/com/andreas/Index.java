@@ -80,7 +80,7 @@ public class Index {
 
     private void addComponent(Component component, int y,
             int x, int width, int height, Insets inset) {
-           
+
         gbc.gridy = y;
         gbc.gridx = x;
         gbc.gridwidth = width;
@@ -102,7 +102,7 @@ class PersonData {
             ResultSet rs = dbc.stmt.executeQuery(
                 "SELECT * FROM user WHERE userName LIKE '" + username + "'"
                 );
-            // In the table 'user' 1st row is 'id',
+            // In the table 'user' 1st column is 'id',
             // 2nd is 'firstName', 3rd is 'lastName'
             while (rs.next()) {
                 this.accId = rs.getInt(1);
