@@ -44,6 +44,7 @@ public class Login {
 
                 if (tryLogin(username, password) == true) {
                     Index i = new Index(username);
+
                     frame.dispose();
                 }
 

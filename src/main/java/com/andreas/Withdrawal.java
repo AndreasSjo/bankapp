@@ -2,7 +2,7 @@ package com.andreas;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import javax.swing.*;
@@ -86,11 +86,18 @@ public class Withdrawal {
         // Then check the number of digits as the table only can handle 38 digits
             if(String.valueOf(tempInteger).length() < 39){
                 this.withdrawalAmount = tempInteger;
-                executeTransaction();
-                frame.dispose();
+        // If the withdrawn amount is bigger than the accountbalance show message. else execute transaction
+                if(withdrawalAmount > accountBalance){
+                    JOptionPane.showMessageDialog(null,"Insufficient funds, go get a job");
+                    frame.dispose();
+                }
+                else {
+                    executeTransaction();
+                    frame.dispose();
+                }
             }
             else{
-                JOptionPane.showMessageDialog(null, "Whoa! that´s to much");
+                JOptionPane.showMessageDialog(null, "Whoa! that´s too much");
             }
         } catch (NumberFormatException ne) {
             JOptionPane.showMessageDialog(null, "input only digits please");
@@ -99,24 +106,37 @@ public class Withdrawal {
     }
 
      private void executeTransaction(){
-        // take off the withdraw amount from account
+        // take off the withdrawn amount from account balance
         this.accountBalance -= withdrawalAmount;
 
         // create an valid sql date format
          long millis=System.currentTimeMillis();
          java.sql.Date date=new java.sql.Date(millis);
-         System.out.println(date);
 
         try {
+            String updateBalanceSql = "UPDATE account SET balance = ? WHERE user_id = ?";
 
-            String sql = "UPDATE account " +
-                        "SET balance = "+ accountBalance +
-                        " WHERE user_id = " + accountId;
-            dbc.stmt.executeUpdate(sql);
+               PreparedStatement preparedBalanceStatement = dbc.con.prepareStatement(updateBalanceSql);
+                preparedBalanceStatement.setInt(1,this.accountBalance);
+                preparedBalanceStatement.setInt(2, this.accountId);
+                    preparedBalanceStatement.executeUpdate();
+                        preparedBalanceStatement.close();
+
+            String updateTransactionSql = "INSERT INTO transactions (id, user_id, type, amount, Date) " +
+                "VALUES (0, ?, ?, ?, ?)";
+
+                PreparedStatement preparedTransactionStatement = dbc.con.prepareStatement(updateTransactionSql);
+                preparedTransactionStatement.setInt(1,this.accountId);
+                preparedTransactionStatement.setString(2, "WITHDRAW");
+                preparedTransactionStatement.setInt(3, this.withdrawalAmount);
+                preparedTransactionStatement.setDate(4,date);
+                    preparedTransactionStatement.executeUpdate();
+                        preparedBalanceStatement.close();
+
 
         } catch (Exception e) {
             System.out.println(e);
-        }
 
+        }
     }
 }
