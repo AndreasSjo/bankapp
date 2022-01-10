@@ -11,14 +11,14 @@ import java.sql.*;
 
 public class Index {
     // Establish a connection to database
-    DBconnection dbc = new DBconnection();
-    JPanel panel = new JPanel();
-    JFrame frame = new JFrame("Start");
-    GridBagConstraints gbc = new GridBagConstraints();
-    GridBagLayout gbl = new GridBagLayout();
-    Insets inset = new Insets(10, 10, 10, 10);
+    private DBconnection dbc = new DBconnection();
+    private JPanel panel = new JPanel();
+    private JFrame frame = new JFrame("Start");
+    private GridBagConstraints gbc = new GridBagConstraints();
+    private GridBagLayout gbl = new GridBagLayout();
+    private Insets inset = new Insets(10, 10, 10, 10);
 
-    public Index(String user) {
+    Index(String user) {
         // Create an object of PersonData to retrieve info
         // passing a databaseconnection and the username
         PersonData pD = new PersonData(dbc,user);
@@ -47,7 +47,7 @@ public class Index {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                // TODO Auto-generated method stub
+                Deposit d = new Deposit(pD.accId);
             }
         });
 
