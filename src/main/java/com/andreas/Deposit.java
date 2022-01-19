@@ -32,7 +32,7 @@ public class Deposit {
 
         JLabel amountLabel = new JLabel("Amount");
 
-        JTextField amountTextField = new JTextField("", 10);
+        JTextField amountTextField = new JTextField("", 5);
 
 
         JButton confirmButton = new JButton("Confirm");
@@ -46,6 +46,7 @@ public class Deposit {
         addComponent(amountLabel, 1, 0, 1, 1, inset);
         addComponent(amountTextField, 1, 1, 1, 1, inset);
         addComponent(confirmButton, 2, 0, 2, 1, inset);
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
     private void addComponent(Component component, int y,

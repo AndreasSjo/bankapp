@@ -25,13 +25,13 @@ public class Login {
         JLabel userLabel = new JLabel("User");
 
 
-        JTextField userField = new JTextField("", 20);
+        JTextField userField = new JTextField("", 10);
 
 
         JLabel passwordLabel = new JLabel("Password");
 
 
-        JPasswordField passwordField = new JPasswordField("", 20);
+        JPasswordField passwordField = new JPasswordField("", 10);
 
 
         JButton loginButton = new JButton("Login");
@@ -68,6 +68,7 @@ public class Login {
         addComponent(passwordField, 2, 1, 1, 1, inset);
         addComponent(loginButton, 3, 0, 1, 1, inset);
         addComponent(cancelButton, 3, 1, 1, 1, inset);
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
     }
@@ -116,5 +117,5 @@ public class Login {
             System.out.println(e);
         }
         return loginOk;
-    }
+       }
 }

@@ -47,6 +47,7 @@ public class Withdrawal {
             addComponent(amountLabel, 1, 0, 1, 1, inset);
             addComponent(amountTextField, 1, 1, 1, 1, inset);
             addComponent(confirmButton, 2, 0, 2, 1, inset);
+                frame.setLocationRelativeTo(null);
             frame.setVisible(true);
 
     }

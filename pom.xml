@@ -40,6 +40,20 @@
     <artifactId>mysql-connector-java</artifactId>
     <version>8.0.27</version>
 </dependency>
+
+    <dependency>
+      <groupId>com.diogonunes</groupId>
+      <artifactId>JCDP</artifactId>
+      <version>4.0.2</version>
+    </dependency>
+
+
+    <dependency>
+      <groupId>com.diogonunes</groupId>
+      <artifactId>JColor</artifactId>
+      <version>5.2.0</version>
+    </dependency>
+
   </dependencies>
   <build>
     <plugins>

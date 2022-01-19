@@ -56,7 +56,7 @@ public class Index {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                // TODO Auto-generated method stub
+                Transactions t = new Transactions(pD.accId);
             }
         });
 
@@ -74,7 +74,7 @@ public class Index {
         addComponent(depositButton, 1, 1, 1, 1, inset);
         addComponent(statementButton, 2, 0, 1, 1, inset);
         addComponent(portfolioButton, 2, 1, 1, 1, inset);
-
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 
@@ -116,15 +116,4 @@ class PersonData {
     }
 }
 
-class WithdrawalWindow{
-    JPanel panel = new JPanel();
-    JFrame frame = new JFrame("Start");
-    GridBagConstraints gbc = new GridBagConstraints();
-    GridBagLayout gbl = new GridBagLayout();
-    Insets inset = new Insets(10, 10, 10, 10);
-
-    WithdrawalWindow(){
-        JLabel amountLabel = new JLabel("Amount to withdraw");
-    }
-}
 
