@@ -4,6 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.*;
 
@@ -17,7 +19,7 @@ public class Withdrawal {
     private int accountId;
     private int accountBalance;
     private int withdrawalAmount;
-
+    private List<Integer> testList = new ArrayList<Integer>( );
     Withdrawal(int accId) {
 
         this.accountId = accId;
@@ -67,7 +69,7 @@ public class Withdrawal {
     private void getAccountBalance(){
         try {
 
-            ResultSet rs = dbc.stmt.executeQuery(
+            ResultSet rs = dbc.statement.executeQuery(
                 "SELECT balance FROM account WHERE user_id LIKE '" + this.accountId + "'"
                 );
             // returns the first column from balance field
@@ -118,7 +120,7 @@ public class Withdrawal {
         try {
             String updateBalanceSql = "UPDATE account SET balance = ? WHERE user_id = ?";
 
-               PreparedStatement preparedBalanceStatement = dbc.con.prepareStatement(updateBalanceSql);
+               PreparedStatement preparedBalanceStatement = dbc.connection.prepareStatement(updateBalanceSql);
                 preparedBalanceStatement.setInt(1,this.accountBalance);
                 preparedBalanceStatement.setInt(2, this.accountId);
                     preparedBalanceStatement.executeUpdate();
@@ -127,7 +129,7 @@ public class Withdrawal {
             String updateTransactionSql = "INSERT INTO transactions (id, user_id, type, amount, Date) " +
                 "VALUES (0, ?, ?, ?, ?)";
 
-                PreparedStatement preparedTransactionStatement = dbc.con.prepareStatement(updateTransactionSql);
+                PreparedStatement preparedTransactionStatement = dbc.connection.prepareStatement(updateTransactionSql);
                 preparedTransactionStatement.setInt(1,this.accountId);
                 preparedTransactionStatement.setString(2, "WITHDRAW");
                 preparedTransactionStatement.setInt(3, this.withdrawalAmount);

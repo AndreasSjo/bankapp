@@ -59,7 +59,7 @@ public class Transactions {
     }
     private JTable getTransactions(){
         try {
-            ResultSet rs = dbc.stmt.executeQuery(
+            ResultSet rs = dbc.statement.executeQuery(
                 "SELECT type,amount,date FROM transactions WHERE user_id LIKE '" + this.accountId + "'");
 
 

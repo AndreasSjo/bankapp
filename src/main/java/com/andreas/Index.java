@@ -1,9 +1,6 @@
 package com.andreas;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,14 +18,14 @@ public class Index {
     Index(String user) {
         // Create an object of PersonData to retrieve info
         // passing a databaseconnection and the username
-        PersonData pD = new PersonData(dbc,user);
+        PersonData personData = new PersonData(dbc,user);
         frame.setSize(350, 350);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(panel);
 
         panel.setLayout(gbl);
 
-        JLabel welcomeHeader = new JLabel("Welcome " + pD.fName + " " + pD.lName);
+        JLabel welcomeHeader = new JLabel("Welcome " + personData.fName + " " + personData.lName);
 
         JButton withdrawButton = new JButton("Withdraw");
         withdrawButton.addActionListener(new ActionListener() {
@@ -37,7 +34,7 @@ public class Index {
             public void actionPerformed(ActionEvent e) {
                 // Creates a new object of withdrawal (basically a window)
                 // passing on the accId which is same as user_id
-                Withdrawal w = new Withdrawal(pD.accId);
+                Withdrawal w = new Withdrawal(personData.accId);
             }
         });
 
@@ -47,7 +44,7 @@ public class Index {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                Deposit d = new Deposit(pD.accId);
+                Deposit d = new Deposit(personData.accId);
             }
         });
 
@@ -56,7 +53,7 @@ public class Index {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                Transactions t = new Transactions(pD.accId);
+                Transactions t = new Transactions(personData.accId);
             }
         });
 
@@ -65,7 +62,7 @@ public class Index {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                // TODO Auto-generated method stub
+                JOptionPane.showMessageDialog(null,"Under construction");
             }
         });
 
@@ -99,7 +96,7 @@ class PersonData {
     public PersonData(DBconnection dbc, String username) {
         try {
 
-            ResultSet rs = dbc.stmt.executeQuery(
+            ResultSet rs = dbc.statement.executeQuery(
                 "SELECT * FROM user WHERE userName LIKE '" + username + "'"
                 );
             // In the table 'user' 1st column is 'id',
