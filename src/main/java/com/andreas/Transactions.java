@@ -8,7 +8,7 @@ import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 
 public class Transactions {
-    private  DBconnection dbc = new DBconnection();
+    private  DBconnection databaseConnection = new DBconnection();
     private JPanel panel = new JPanel();
     private JFrame frame = new JFrame("Login");
     private GridBagConstraints gbc = new GridBagConstraints();
@@ -59,7 +59,7 @@ public class Transactions {
     }
     private JTable getTransactions(){
         try {
-            ResultSet rs = dbc.statement.executeQuery(
+            ResultSet rs = databaseConnection.statement.executeQuery(
                 "SELECT type,amount,date FROM transactions WHERE user_id LIKE '" + this.accountId + "'");
 
 
@@ -80,7 +80,7 @@ public class Transactions {
         }catch (Exception e){
             System.out.println(e);
         }
-        JTable jt = new JTable(tableModel);
-        return jt;
+        JTable jTable = new JTable(tableModel);
+        return jTable;
     }
 }

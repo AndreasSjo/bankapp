@@ -8,7 +8,7 @@ import java.sql.*;
 
 public class Index {
     // Establish a connection to database
-    private DBconnection dbc = new DBconnection();
+    private DBconnection databaseConnection = new DBconnection();
     private JPanel panel = new JPanel();
     private JFrame frame = new JFrame("Start");
     private GridBagConstraints gbc = new GridBagConstraints();
@@ -18,14 +18,14 @@ public class Index {
     Index(String user) {
         // Create an object of PersonData to retrieve info
         // passing a databaseconnection and the username
-        PersonData personData = new PersonData(dbc,user);
+        PersonData personData = new PersonData(databaseConnection,user);
         frame.setSize(350, 350);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(panel);
 
         panel.setLayout(gbl);
 
-        JLabel welcomeHeader = new JLabel("Welcome " + personData.fName + " " + personData.lName);
+        JLabel welcomeHeader = new JLabel("Welcome " + personData.firstName + " " + personData.lastName);
 
         JButton withdrawButton = new JButton("Withdraw");
         withdrawButton.addActionListener(new ActionListener() {
@@ -33,8 +33,8 @@ public class Index {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Creates a new object of withdrawal (basically a window)
-                // passing on the accId which is same as user_id
-                Withdrawal w = new Withdrawal(personData.accId);
+                // passing on the accountId which is same as user_id
+                Withdrawal w = new Withdrawal(personData.accountId);
             }
         });
 
@@ -44,7 +44,7 @@ public class Index {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                Deposit d = new Deposit(personData.accId);
+                Deposit d = new Deposit(personData.accountId);
             }
         });
 
@@ -53,7 +53,7 @@ public class Index {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                Transactions t = new Transactions(personData.accId);
+                Transactions t = new Transactions(personData.accountId);
             }
         });
 
@@ -89,28 +89,7 @@ public class Index {
 }
 
 
-class PersonData {
-    String fName, lName;
-    int accId;
 
-    public PersonData(DBconnection dbc, String username) {
-        try {
 
-            ResultSet rs = dbc.statement.executeQuery(
-                "SELECT * FROM user WHERE userName LIKE '" + username + "'"
-                );
-            // In the table 'user' 1st column is 'id',
-            // 2nd is 'firstName', 3rd is 'lastName'
-            while (rs.next()) {
-                this.accId = rs.getInt(1);
-                this.fName = rs.getString(2);
-                this.lName = rs.getString(3);
-            }
-
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-}
 
 

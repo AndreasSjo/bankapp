@@ -10,26 +10,26 @@ import java.util.List;
 import javax.swing.*;
 
 public class Withdrawal {
-    private DBconnection dbc = new DBconnection();
+    private DBconnection databaseConnection = new DBconnection();
     private JPanel panel = new JPanel();
     private JFrame frame = new JFrame("Withdraw");
-    private GridBagConstraints gbc = new GridBagConstraints();
-    private GridBagLayout gbl = new GridBagLayout();
+    private GridBagConstraints gridBagConstraints = new GridBagConstraints();
+    private GridBagLayout gridBagLayout = new GridBagLayout();
     private Insets inset = new Insets(10, 10, 10, 10);
     private int accountId;
     private int accountBalance;
     private int withdrawalAmount;
     private List<Integer> testList = new ArrayList<Integer>( );
-    Withdrawal(int accId) {
+    Withdrawal(int accountId) {
 
-        this.accountId = accId;
+        this.accountId = accountId;
         getAccountBalance();
 
 
         frame.setSize(350, 350);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(panel);
-        panel.setLayout(gbl);
+        panel.setLayout(gridBagLayout);
 
 
 
@@ -57,19 +57,19 @@ public class Withdrawal {
     private void addComponent(Component component, int y,
             int x, int width, int height, Insets inset) {
 
-        gbc.gridy = y;
-        gbc.gridx = x;
-        gbc.gridwidth = width;
-        gbc.gridheight = height;
-        gbc.insets = inset;
-        gbl.setConstraints(component, gbc);
+        gridBagConstraints.gridy = y;
+        gridBagConstraints.gridx = x;
+        gridBagConstraints.gridwidth = width;
+        gridBagConstraints.gridheight = height;
+        gridBagConstraints.insets = inset;
+        gridBagLayout.setConstraints(component, gridBagConstraints);
         panel.add(component);
     }
 
     private void getAccountBalance(){
         try {
 
-            ResultSet rs = dbc.statement.executeQuery(
+            ResultSet rs = databaseConnection.statement.executeQuery(
                 "SELECT balance FROM account WHERE user_id LIKE '" + this.accountId + "'"
                 );
             // returns the first column from balance field
@@ -110,7 +110,7 @@ public class Withdrawal {
     }
 
      private void executeTransaction(){
-        // take off the withdrawn amount from account balance
+
         this.accountBalance -= withdrawalAmount;
 
         // create an valid sql date format
@@ -120,7 +120,7 @@ public class Withdrawal {
         try {
             String updateBalanceSql = "UPDATE account SET balance = ? WHERE user_id = ?";
 
-               PreparedStatement preparedBalanceStatement = dbc.connection.prepareStatement(updateBalanceSql);
+               PreparedStatement preparedBalanceStatement = databaseConnection.connection.prepareStatement(updateBalanceSql);
                 preparedBalanceStatement.setInt(1,this.accountBalance);
                 preparedBalanceStatement.setInt(2, this.accountId);
                     preparedBalanceStatement.executeUpdate();
@@ -129,7 +129,7 @@ public class Withdrawal {
             String updateTransactionSql = "INSERT INTO transactions (id, user_id, type, amount, Date) " +
                 "VALUES (0, ?, ?, ?, ?)";
 
-                PreparedStatement preparedTransactionStatement = dbc.connection.prepareStatement(updateTransactionSql);
+                PreparedStatement preparedTransactionStatement = databaseConnection.connection.prepareStatement(updateTransactionSql);
                 preparedTransactionStatement.setInt(1,this.accountId);
                 preparedTransactionStatement.setString(2, "WITHDRAW");
                 preparedTransactionStatement.setInt(3, this.withdrawalAmount);
